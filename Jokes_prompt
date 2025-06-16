@@ -3,7 +3,7 @@ from openai import OpenAI
 
 client = OpenAI(api_key = api_key)
 def answer_prompt(text):
-  prompt = f"tell me a funny joke about {text}"
+  prompt = f"tell me a funny joke about {text.strip().lower()}"
   response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
