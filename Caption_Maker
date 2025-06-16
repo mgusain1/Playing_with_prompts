@@ -1,0 +1,26 @@
+from openai import OpenAI
+import base64
+
+img_path = "/content/Tiger.png"
+with open(img_path,"rb") as r:
+  img = r.read()
+base64_img = base64.b64encode(img).decode("utf-8")
+image_url = f"data:image/png;base64,{base64_img}"
+
+client = OpenAI(api_key = "get your own API key")
+def make_prompt(url):
+  response = client.chat.completions.create(
+    model="gpt-4-vision-preview",
+    messages=[
+      {
+        "role": "user",
+        "content": [
+            {"type":"text","text":"write a caption for this pic"},
+            {"type":"image_url","image_url":{"url":url}}
+        ]
+      }
+    ]
+  )
+  return response.choices[0]["message"]["content"]
+
+print(make_prompt(image_url))
