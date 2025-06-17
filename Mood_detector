@@ -1,0 +1,24 @@
+import speech_recognition as sr
+from textblob import TextBlob
+r = sr.Recognizer()
+
+with sr.Microphone() as source:
+    print("Speak Now")
+    audio = r.listen(source)
+    try:
+        text = r.recognize_google(audio)
+        print("You said:", text)
+        blob = TextBlob(text)
+        sentiment = blob.sentiment
+        print("Polarity:", sentiment.polarity)
+        print("Subjectivity:", sentiment.subjectivity)
+        if sentiment.polarity > 0.3:
+            print("Really Happy")
+        elif sentiment.polarity > -0.3 and sentiment.polarity < 0.3:
+            print("Kind of Neutral")
+        else:
+            print("Really Sad")
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio 😕")
+    except sr.RequestError as e:
+        print("Here is your error ",e)
